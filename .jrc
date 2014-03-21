@@ -1,0 +1,139 @@
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Author: Alex Guo
+# Contact: chessnut@outlook.com
+# Program: JARVIS.
+# Purpose: Significantly speed up CLI.
+
+JARVIS_HOME=$(pwd)
+JARVIS_SVR="http://alexbug.com/"
+JARVIS_DIR="http://alexbug.com/up/"
+
+function jarvis_cd() {
+  cd $1;
+  if [[ -n "$2" ]]
+  then
+    cd $2
+  fi
+}
+
+function jarvis_jump() {
+  touch $JARVIS_HOME"/.jarvis"
+
+  while read line
+  do
+      parsed=(`echo $line | tr '=' ' '`)
+      name=${parsed[0]}
+      to=${parsed[1]}
+
+      if [ "$name" == "$1" ];
+      then
+        jarvis_cd $to $2
+      fi
+  done < $JARVIS_HOME"/.jarvis"
+}
+
+function jarvis_all() {
+  cat ~/.jarvis
+}
+
+function jarvis_add() {
+  touch $JARVIS_HOME"/.jarvis"
+  cur_wd=$(pwd)
+  echo "Type an alias for the current working directory, or ^C to quit:"
+  read cur_alias
+  echo $cur_alias"="$cur_wd >> $JARVIS_HOME"/.jarvis"
+}
+
+function jarvis_update() {
+  SRC_URL='https://github.com/mallochine/jarvis2/raw/master'
+  wget -r -q $SRC_URL"/.jrc" -O $JARVIS_HOME"/.jrc"
+  . $JARVIS_HOME"/.jrc"
+  echo "Updated."
+}
+
+function jarvis_upload() {
+  if [ $# -eq 0 ]
+  then
+    echo "Usage: j up <filename>"
+    return
+  fi
+  file=$1
+  echo "Uploading..."
+  curl --form "file=@$file" --form "cmd=up" $JARVIS_SVR"jarvis.php"
+  echo "\"$file\"" has been uploaded to $JARVIS_DIR$file".txt"
+  echo "You can use \"j get "$file"\" to download the file."
+}
+
+function jarvis_download() {
+  if [ $# -eq 0 ]
+  then
+    echo "Usage: j get <filename>"
+    return
+  fi
+  file=$1
+  echo "Downloading..."
+  wget $JARVIS_DIR$file".txt" -O $file
+}
+
+function jarvis_ls() {
+  jarvis_cat "../log/ls"
+}
+
+function jarvis_printError() {
+  jarvis_cat "../log/jarvis_upload"
+}
+
+function jarvis_cat() {
+  if [ $# -eq 0 ]
+  then
+    echo "Usage: j cat <filename>"
+    return
+  fi
+  file=$1
+  wget -O- -q $JARVIS_DIR$file".txt"
+}
+
+function jarvis_remove() {
+  if [ $# -eq 0 ]
+  then
+    echo "Usage: j rm <filename>"
+    return
+  fi
+  file=$1
+  curl --form "file=$file" --form "cmd=rm" $JARVIS_SVR"jarvis.php"
+}
+
+function jarvis_main() {
+  cmd=$1
+
+  case $cmd in
+  "add") jarvis_add;;
+  "all") jarvis_all;;
+  "get"|"down"|"download") shift; jarvis_download $@;;
+  "update") jarvis_update;;
+  "up"|"upload") shift; jarvis_upload $@;;
+  "cat") shift; jarvis_cat $@;;
+  "ls") shift; jarvis_ls $@;;
+  "rm") shift; jarvis_remove $@;;
+  *) jarvis_jump $@;;
+  esac
+
+  # set -f and set +f are needed so that we can actually listen
+  # to what the user is trying to say, such as j rm *, instead
+  # of having bash automatically expand that for us.
+  set +f
+}
+
+alias j="set -f; jarvis_main"
