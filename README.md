@@ -8,10 +8,10 @@ Program: JARVIS.
 
 Backend code: https://github.com/mallochine/jarvis2-svr
 
-JARVIS 2.0 Change Log
+JARVIS 3.0
 ---------------------
 
-3/20/2014: What's new is the remote filesystem. Anybody who's SSH'd somewhere knows
+What's new is a Dropbox-like remote filesystem. Anybody who's SSH'd somewhere knows
 how much of a pain in the ass it is to transfer files between the server and
 other computers (servers or clients). With "j up", you can upload files
 to a easy-to-type URL, and then download with "j get".
@@ -19,27 +19,14 @@ to a easy-to-type URL, and then download with "j get".
 On top of all that, you can treat the remote filesystem as a Unix filesystem with
 commands like "j rm", "j ls", and "j cat".
 
-2/28/2014: What's new in JARVIS 2.0 is filesystem navigation through _user-input_,
-instead of a machine trying to learn how the user behaves. As it turns out, it's a
-very natural habit for users to create bookmarks, while it is very _unnatural_ to wait
-for a machine to catch up to you. JARVIS 2.0 is a prototype for this "naturalness"
-thesis.
-
-What's new in recent updates to JARVIS 2.0 is that you can now easily integrate your
-CLI environment into a remote server.
-
-
-
 Installation
 -------------
 Download the whole git repo (git clone http://github.com/mallochine/jarvis2.git).
 Run the command that corresponds to your shell:
 
-make bash 
-
-make zsh 
-
-make csh
+- make bash 
+- make zsh 
+- make csh
 
 Commands
 ----------
@@ -158,4 +145,5 @@ proxies=/home/ec2-user/space/fics-proxy
 See Also
 ----------
 
-- the backend code that runs JARVIS 2! https://github.com/mallochine/jarvis2-svr
+- JARVIS2: https://github.com/mallochine/jarvis2
+- the backend code that runs JARVIS: https://github.com/mallochine/jarvis2-svr
