@@ -125,6 +125,36 @@ aguo@unix1:~/space$ j ls
 aguo@unix1:~/space$ # Nothing in uploaded!
 ```
 
+### j edit
+
+Edits your bookmarks using the Vim editor.
+
+```bash
+[ec2-user@ip-10-252-62-49 ~]$ j edit
+```
+
+```bash
+  1 bics=/var/bics
+  2 newpl=/var/bics/newplayers
+  3 src=/home/ec2-user/space/bics-current/src
+  4 stats=/var/bics/data/stats
+  5 players=/var/bics/players
+  6 jarvis2=/home/ec2-user/space/jarvis2
+  7 html=/var/www/html
+  8 debug=/var/bics-debug
+  9 proxies=/home/ec2-user/space/fics-proxy
+~
+~
+~
+~
+~
+~
+~
+~
+~
+
+```
+
 ### j all
 
 Lists all the bookmarks you have.
