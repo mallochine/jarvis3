@@ -20,7 +20,7 @@ JARVIS_HOME=$(pwd)
 JARVIS_SVR="http://alexbug.com/"
 JARVIS_DIR="http://alexbug.com/up/"
 
-function jarvis_cd() {
+function jarvis_cd {
   cd $1;
   if [[ -n "$2" ]]
   then
@@ -28,7 +28,7 @@ function jarvis_cd() {
   fi
 }
 
-function jarvis_jump() {
+function jarvis_jump {
   touch $JARVIS_HOME"/.jarvis"
 
   while read line
@@ -44,11 +44,11 @@ function jarvis_jump() {
   done < $JARVIS_HOME"/.jarvis"
 }
 
-function jarvis_all() {
+function jarvis_all {
   cat ~/.jarvis
 }
 
-function jarvis_add() {
+function jarvis_add {
   touch $JARVIS_HOME"/.jarvis"
   cur_wd=$(pwd)
   echo "Type an alias for the current working directory, or ^C to quit:"
@@ -56,14 +56,14 @@ function jarvis_add() {
   echo $cur_alias"="$cur_wd >> $JARVIS_HOME"/.jarvis"
 }
 
-function jarvis_update() {
+function jarvis_update {
   SRC_URL='https://github.com/mallochine/jarvis2/raw/master'
   wget -r -q $SRC_URL"/.jrc" -O $JARVIS_HOME"/.jrc"
   . $JARVIS_HOME"/.jrc"
   echo "Updated."
 }
 
-function jarvis_upload() {
+function jarvis_upload {
   if [ $# -eq 0 ]
   then
     echo "Usage: j up <filename>"
@@ -76,7 +76,7 @@ function jarvis_upload() {
   echo "You can use \"j get "$file"\" to download the file."
 }
 
-function jarvis_download() {
+function jarvis_download {
   if [ $# -eq 0 ]
   then
     echo "Usage: j get <filename>"
@@ -87,15 +87,15 @@ function jarvis_download() {
   wget $JARVIS_DIR$file".txt" -O $file
 }
 
-function jarvis_ls() {
+function jarvis_ls {
   jarvis_cat "../log/ls"
 }
 
-function jarvis_printError() {
+function jarvis_printError {
   jarvis_cat "../log/jarvis_upload"
 }
 
-function jarvis_cat() {
+function jarvis_cat {
   if [ $# -eq 0 ]
   then
     echo "Usage: j cat <filename>"
@@ -105,7 +105,7 @@ function jarvis_cat() {
   wget -O- -q $JARVIS_DIR$file".txt"
 }
 
-function jarvis_remove() {
+function jarvis_remove {
   if [ $# -eq 0 ]
   then
     echo "Usage: j rm <filename>"
@@ -115,7 +115,11 @@ function jarvis_remove() {
   curl --form "file=$file" --form "cmd=rm" $JARVIS_SVR"jarvis.php"
 }
 
-function jarvis_main() {
+function jarvis_edit {
+  vim $JARVIS_HOME"/.jarvis"
+}
+
+function jarvis_main {
   cmd=$1
 
   case $cmd in
@@ -127,6 +131,7 @@ function jarvis_main() {
   "cat") shift; jarvis_cat $@;;
   "ls") shift; jarvis_ls $@;;
   "rm") shift; jarvis_remove $@;;
+  "edit") jarvis_edit;;
   *) jarvis_jump $@;;
   esac
 
