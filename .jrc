@@ -57,7 +57,7 @@ function jarvis_add {
 }
 
 function jarvis_update {
-  SRC_URL='https://github.com/mallochine/jarvis2/raw/master'
+  SRC_URL='https://github.com/mallochine/jarvis3/raw/master'
   wget -r -q $SRC_URL"/.jrc" -O $JARVIS_HOME"/.jrc"
   . $JARVIS_HOME"/.jrc"
   echo "Updated."
@@ -131,7 +131,7 @@ function jarvis_main {
   "cat") shift; jarvis_cat $@;;
   "ls") shift; jarvis_ls $@;;
   "rm") shift; jarvis_remove $@;;
-  "edit") jarvis_edit;;
+  "edit"|"vim") jarvis_edit;;
   *) jarvis_jump $@;;
   esac
 
